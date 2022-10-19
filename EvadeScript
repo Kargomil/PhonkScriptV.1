@@ -1,3 +1,4 @@
+--By Kargoligach 
 
 -- Wait for game to load
 repeat task.wait() until game:IsLoaded();
@@ -26,23 +27,30 @@ local lib = loadstring(game:HttpGet("https://raw.githubusercontent.com/Babyhamst
 local ESP = loadstring(game:HttpGet("https://raw.githubusercontent.com/Babyhamsta/RBLX_Scripts/main/Universal/SimpleHighlightESP.lua"))()
 
 -- Main Window
-local Window = lib:CreateWindow("PhonkHub")
+local Window = lib:CreateWindow("Evade Gui")
 
 -- Create Pages
 local CharPage = Window:NewTab("Character")
-local ESPPage = Window:NewTab("ESP")
-local AutoPage = Window:NewTab("AutoFarm")
+local InvePage = Window:NewTab("Inventory")
+local ServerPage = Window:NewTab("Server")
+local ESPPage = Window:NewTab("ESP/Camera")
+local AFKPage = Window:NewTab("AFKFarm")
+local CreditPage = Window:NewTab("Credit")
+
 -- Create Sections
 local MainSection = CharPage:AddSection("Character")
+local InventorySection = InvePage:AddSection("Inventory")
+local ServerSection = ServerPage:AddSection("Server")
 local ESPSection = ESPPage:AddSection("ESP")
-local AutoSection = AutoPage:AddSection("AutoFarm")
-
+local CamSection = ESPPage:AddSection("Camera")
+local AFKSection = AFKPage:AddSection("Farm")
+local CreditSection = Credit:AddSection("By kargoligach")
 
 -- GUI Toggles / Settings
 local Highlights_Active = false;
 local AI_ESP = false;
 local GodMode_Enabled = false;
-local AutoFarm = false;
+local No_CamShake = false;
 
 -- Anti AFK
 for i,v in pairs(getconnections(game:GetService("Players").LocalPlayer.Idled)) do v:Disable() end
@@ -95,14 +103,34 @@ function ClearESP(espname)
     end
 end
 
--- God Mode
+-- God Mode (Credits to Egg Salad)
 MainSection:AddButton("God Mode", "Gives you god mode", function()
-    local Character = Player.Character or Player.CharacterAdded:Wait()
-    local Hum = Character:WaitForChild("Humanoid")
-    Hum.Parent = nil;
-    Hum.Parent = Character;
+    pcall(function()
+        for i,v in next, game:GetDescendants() do
+            if v.IsA(v,"BindableEvent") and string.lower(v.Name) == 'force' then
+                v:Destroy()
+            end
+            end
+            game.DescendantAdded:Connect(function(v)
+                task.wait()
+                if v.IsA(v,"BindableEvent") and string.lower(v.Name) == 'force' then
+                    v:Destroy()
+                end
+            end)
+        end)
 end)
 
+-- Respawn/Reset
+MainSection:AddButton("Respawn", "Free respawn, no need to pay 15 robux!", function()
+    local Reset = Events:FindFirstChild("Reset")
+    local Respawn = Events:FindFirstChild("Respawn")
+
+    if Reset and Respawn then
+        Reset:FireServer();
+        task.wait(2)
+        Respawn:FireServer();
+    end
+end)
 
 -- Make server all bright so your eye balls can see
 MainSection:AddButton("Full Bright", "For users who are scared of the dark :(", function()
@@ -132,6 +160,7 @@ MainSection:AddSlider("JumpPower", "Adjust JumpPower and dunk", 3, 15, 3, true, 
 end)
 
 
+
 -- Character Highlights
 ESPSection:AddButton("Character Highlights", "Highlights all characters to make them easier to see.", function()
     ESP:ClearESP();
@@ -157,15 +186,28 @@ ESPSection:AddToggle("AI ESP", "Adds text ESP to AI to make them easier to see."
     AI_ESP = bool;
 end)
 
--- AutoFarm
-AutoSection:AddButton("AutoFarm", "", function()
- while task.wait() do
-                c = math.random(150,350)
-                if game:GetService("Workspace").Game.Map.Parts:FindFirstChild("KillBricks") then game:GetService("Workspace").Game.Map.Parts.KillBricks:Destroy() end
-                task.wait()
-                game.Workspace.Game.Players:WaitForChild(game.Players.LocalPlayer.Name):WaitForChild("HumanoidRootPart").CFrame = CFrame.new(0,c,0)
-end
+-- No Camera Shake
+CamSection:AddToggle("No Camera Shake", "Removes camera shake that is caused by the AI.", false, function(bool)
+    No_CamShake = bool;
+end)
 
+--Afk Farmm 
+AFKSection:AddButton("Afk Farm", "Farm ", function()
+pcall(function()
+                    for i,v in next, game:GetDescendants() do
+                        if v.IsA(v,"BindableEvent") and string.lower(v.Name) == 'force' then
+                            v:Destroy()
+                        end
+                        end
+                        game.DescendantAdded:Connect(function(v)
+                            task.wait()
+                            if v.IsA(v,"BindableEvent") and string.lower(v.Name) == 'force' then
+                                v:Destroy()
+                            end
+                        end)
+                    end)
+            end)
+            
 -- [[ Helpers / Loop Funcs ]] --
 
 -- Highlight helper
@@ -182,7 +224,7 @@ end)
 Player.CharacterAdded:Connect(function(Char)
     local Hum = Char:WaitForChild("Humanoid", 1337);
 
-    -- Godmode helper (Credits to Egg Salad)
+    -- Godmode helper 
     if GodMode_Enabled then
         Hum.Parent = nil;
         Hum.Parent = Char;
@@ -209,4 +251,12 @@ task.spawn(function()
         end
     end
 end)
+
+-- Camera Shake
+task.spawn(function()
+    while task.wait() do
+        if No_CamShake then
+            Player.PlayerScripts:WaitForChild("CameraShake", 1234).Value = CFrame.new(0,0,0) * CFrame.Angles(0,0,0);
+        end
+    end
 end)
