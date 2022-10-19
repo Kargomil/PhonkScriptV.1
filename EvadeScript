@@ -27,7 +27,7 @@ local lib = loadstring(game:HttpGet("https://raw.githubusercontent.com/Babyhamst
 local ESP = loadstring(game:HttpGet("https://raw.githubusercontent.com/Babyhamsta/RBLX_Scripts/main/Universal/SimpleHighlightESP.lua"))()
 
 -- Main Window
-local Window = lib:CreateWindow("Evade Gui")
+local Window = lib:CreateWindow("PhonkHub")
 
 -- Create Pages
 local CharPage = Window:NewTab("Character")
