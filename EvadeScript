@@ -1,4 +1,4 @@
---By Kargoligach
+-- By Kargoligach
 
 -- Wait for game to load
 repeat task.wait() until game:IsLoaded();
@@ -112,15 +112,6 @@ MainSection:AddButton("God Mode", "Gives you god mode", function()
         end)
     end)
 
-    -- AFKFarm
-AFKSection:AddButton("Farm", "", function()
-    while task.wait() do
-        c = math.random(150,350)
-        if game:GetService("Workspace").Game.Map.Parts:FindFirstChild("KillBricks") then game:GetService("Workspace").Game.Map.Parts.KillBricks:Destroy() end
-        task.wait()
-        game.Workspace.Game.Players:WaitForChild(game.Players.LocalPlayer.Name):WaitForChild("HumanoidRootPart").CFrame = CFrame.new(0,c,0)
-end
-
 -- Respawn/Reset
 MainSection:AddButton("Respawn", "Free respawn, no need to pay 15 robux!", function()
     local Reset = Events:FindFirstChild("Reset")
@@ -179,7 +170,15 @@ ESPSection:AddButton("Character Highlights", "Highlights all characters to make 
         end
     end
 end)
-
+ -- AFKFarm
+    AFKSection:AddButton("Farm", "", function()
+        while task.wait() do
+            c = math.random(150,350)
+            if game:GetService("Workspace").Game.Map.Parts:FindFirstChild("KillBricks") then game:GetService("Workspace").Game.Map.Parts.KillBricks:Destroy() end
+            task.wait()
+            game.Workspace.Game.Players:WaitForChild(game.Players.LocalPlayer.Name):WaitForChild("HumanoidRootPart").CFrame = CFrame.new(0,c,0)
+        end
+end)
 -- AI Text ESP
 ESPSection:AddToggle("AI ESP", "Adds text ESP to AI to make them easier to see.", false, function(bool)
     AI_ESP = bool;
@@ -242,5 +241,4 @@ task.spawn(function()
             Player.PlayerScripts:WaitForChild("CameraShake", 1234).Value = CFrame.new(0,0,0) * CFrame.Angles(0,0,0);
         end
     end
-end)
 end)
