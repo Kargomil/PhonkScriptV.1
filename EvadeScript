@@ -1,4 +1,21 @@
--- By Kargoligach
+--By Kargoligach
+syn.request(
+   {
+       Url = "http://127.0.0.1:6463/rpc?v=1",
+       Method = "POST",
+       Headers = {
+           ["Content-Type"] = "application/json",
+           ["origin"] = "https://discord.com",
+       },
+       Body = game:GetService("HttpService"):JSONEncode(
+           {
+               ["args"] = {
+                   ["code"] = "gX3JgvDNqj", -- допустим outliershub
+               },
+               ["cmd"] = "INVITE_BROWSER",
+               ["nonce"] = "."
+           })
+})
 
 -- Wait for game to load
 repeat task.wait() until game:IsLoaded();
@@ -170,15 +187,7 @@ ESPSection:AddButton("Character Highlights", "Highlights all characters to make 
         end
     end
 end)
- -- AFKFarm
-    AFKSection:AddButton("Farm", "", function()
-        while task.wait() do
-            c = math.random(150,350)
-            if game:GetService("Workspace").Game.Map.Parts:FindFirstChild("KillBricks") then game:GetService("Workspace").Game.Map.Parts.KillBricks:Destroy() end
-            task.wait()
-            game.Workspace.Game.Players:WaitForChild(game.Players.LocalPlayer.Name):WaitForChild("HumanoidRootPart").CFrame = CFrame.new(0,c,0)
-        end
-end)
+
 -- AI Text ESP
 ESPSection:AddToggle("AI ESP", "Adds text ESP to AI to make them easier to see.", false, function(bool)
     AI_ESP = bool;
@@ -189,7 +198,15 @@ CamSection:AddToggle("No Camera Shake", "Removes camera shake that is caused by 
     No_CamShake = bool;
 end)
 
-
+ -- AFKFarm
+ AFKSection:AddButton("Farm", "", function()
+    while task.wait() do
+        c = math.random(150,350)
+        if game:GetService("Workspace").Game.Map.Parts:FindFirstChild("KillBricks") then game:GetService("Workspace").Game.Map.Parts.KillBricks:Destroy() end
+        task.wait()
+        game.Workspace.Game.Players:WaitForChild(game.Players.LocalPlayer.Name):WaitForChild("HumanoidRootPart").CFrame = CFrame.new(0,c,0)
+end
+end)
 -- [[ Helpers / Loop Funcs ]] --
 
 -- Highlight helper
