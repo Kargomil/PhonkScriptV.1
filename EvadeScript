@@ -1,4 +1,4 @@
---By Kargoligach 
+--By Kargoligach
 
 -- Wait for game to load
 repeat task.wait() until game:IsLoaded();
@@ -31,21 +31,13 @@ local Window = lib:CreateWindow("PhonkHub")
 
 -- Create Pages
 local CharPage = Window:NewTab("Character")
-local InvePage = Window:NewTab("Inventory")
-local ServerPage = Window:NewTab("Server")
 local ESPPage = Window:NewTab("ESP/Camera")
 local AFKPage = Window:NewTab("AFKFarm")
-local CreditPage = Window:NewTab("Credit")
-
 -- Create Sections
 local MainSection = CharPage:AddSection("Character")
-local InventorySection = InvePage:AddSection("Inventory")
-local ServerSection = ServerPage:AddSection("Server")
 local ESPSection = ESPPage:AddSection("ESP")
 local CamSection = ESPPage:AddSection("Camera")
-local AFKSection = AFKPage:AddSection("Farm")
-local CreditSection = Credit:AddSection("By kargoligach")
-
+local AFKSection = AFKPage:AddSection("AFKFARM")
 -- GUI Toggles / Settings
 local Highlights_Active = false;
 local AI_ESP = false;
@@ -103,7 +95,7 @@ function ClearESP(espname)
     end
 end
 
--- God Mode (Credits to Egg Salad)
+-- God Mode 
 MainSection:AddButton("God Mode", "Gives you god mode", function()
     pcall(function()
         for i,v in next, game:GetDescendants() do
@@ -118,7 +110,16 @@ MainSection:AddButton("God Mode", "Gives you god mode", function()
                 end
             end)
         end)
-end)
+    end)
+
+    -- AFKFarm
+AFKSection:AddButton("Farm", "", function()
+    while task.wait() do
+        c = math.random(150,350)
+        if game:GetService("Workspace").Game.Map.Parts:FindFirstChild("KillBricks") then game:GetService("Workspace").Game.Map.Parts.KillBricks:Destroy() end
+        task.wait()
+        game.Workspace.Game.Players:WaitForChild(game.Players.LocalPlayer.Name):WaitForChild("HumanoidRootPart").CFrame = CFrame.new(0,c,0)
+end
 
 -- Respawn/Reset
 MainSection:AddButton("Respawn", "Free respawn, no need to pay 15 robux!", function()
@@ -159,8 +160,6 @@ MainSection:AddSlider("JumpPower", "Adjust JumpPower and dunk", 3, 15, 3, true, 
     end)
 end)
 
-
-
 -- Character Highlights
 ESPSection:AddButton("Character Highlights", "Highlights all characters to make them easier to see.", function()
     ESP:ClearESP();
@@ -191,23 +190,7 @@ CamSection:AddToggle("No Camera Shake", "Removes camera shake that is caused by 
     No_CamShake = bool;
 end)
 
---Afk Farmm 
-AFKSection:AddButton("Afk Farm", "Farm ", function()
-pcall(function()
-                    for i,v in next, game:GetDescendants() do
-                        if v.IsA(v,"BindableEvent") and string.lower(v.Name) == 'force' then
-                            v:Destroy()
-                        end
-                        end
-                        game.DescendantAdded:Connect(function(v)
-                            task.wait()
-                            if v.IsA(v,"BindableEvent") and string.lower(v.Name) == 'force' then
-                                v:Destroy()
-                            end
-                        end)
-                    end)
-            end)
-            
+
 -- [[ Helpers / Loop Funcs ]] --
 
 -- Highlight helper
@@ -224,7 +207,7 @@ end)
 Player.CharacterAdded:Connect(function(Char)
     local Hum = Char:WaitForChild("Humanoid", 1337);
 
-    -- Godmode helper 
+    -- Godmode helper (Credits to Egg Salad)
     if GodMode_Enabled then
         Hum.Parent = nil;
         Hum.Parent = Char;
