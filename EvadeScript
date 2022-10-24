@@ -1,101 +1,51 @@
---By Kargoligach
--- Wait for game to load
-repeat task.wait() until game:IsLoaded();
+local WorkspacePlayers = game:GetService("Workspace").Game.Players
+local Players = game:GetService('Players')
+local localplayer = Players.LocalPlayer
 
--- Temp fix for ROBLOX turning off highlights
-if setfflag then setfflag("OutlineSelection", "true") end
+local Library = loadstring(game:HttpGet("https://raw.githubusercontent.com/9Strew/roblox/main/proc/jans"))()
+local Esp = loadstring(game:HttpGet("https://raw.githubusercontent.com/9Strew/roblox/main/proc/kiriotesp"))()
+Esp.Enabled = false
+Esp.Tracers = false
+Esp.Boxes = false
 
--- Services
-local ReplicatedStorage = game:GetService("ReplicatedStorage");
-local CoreGui = game:GetService("CoreGui");
-local Players = game:GetService("Players");
-local Workspace = game:GetService("Workspace");
-local Lighting = game:GetService("Lighting");
-local VirtualInputManager = game:GetService("VirtualInputManager");
+local Window = Library:CreateWindow("PhonkHub", Vector2.new(500, 300), Enum.KeyCode.RightShift)
+local Evade = Window:CreateTab("General")
 
--- Remote Stuff
-local Events = ReplicatedStorage:WaitForChild("Events", 1337)
+local EvadeSector = Evade:CreateSector("Character", "left")
+local Visuals = Evade:CreateSector("Visuals", "right")
+local Farms = Evade:CreateSector("Farms", "right")
 
--- Local Player
-local Player = Players.LocalPlayer;
 
--- UI Lib (Fluxus Lib because I like to shuffle them and they support WEAO <3)
-local lib = loadstring(game:HttpGet("https://raw.githubusercontent.com/Babyhamsta/RBLX_Scripts/main/UILibs/FluxusUI.lua"))()
 
--- ESP support
-local ESP = loadstring(game:HttpGet("https://raw.githubusercontent.com/Babyhamsta/RBLX_Scripts/main/Universal/SimpleHighlightESP.lua"))()
+getgenv().Settings = {
+    moneyfarm = false,
+    afkfarm = false,
+    NoCameraShake = false,
+    Downedplayeresp = false,
+    AutoRespawn = false,
+    TicketFarm = false,
+    Speed = 1450,
+    Jump = 3,
+    reviveTime = 3,
+    DownedColor = Color3.fromRGB(255,0,0),
+    PlayerColor = Color3.fromRGB(255,170,0),
+}
 
--- Main Window
-local Window = lib:CreateWindow("PhonkHub")
 
--- Create Pages
-local CharPage = Window:NewTab("Character")
-local ESPPage = Window:NewTab("ESP/Camera")
-local AFKPage = Window:NewTab("AFKFarm")
--- Create Sections
-local MainSection = CharPage:AddSection("Character")
-local ESPSection = ESPPage:AddSection("ESP")
-local CamSection = ESPPage:AddSection("Camera")
-local AFKSection = AFKPage:AddSection("AFKFARM")
--- GUI Toggles / Settings
-local Highlights_Active = false;
-local AI_ESP = false;
-local GodMode_Enabled = false;
-local No_CamShake = false;
+local WalkSpeed = EvadeSector:AddSlider("Speed", 1450, 1450, 12000, 100, function(Value)
+    Settings.Speed = Value
+end)
 
--- Anti AFK
-for i,v in pairs(getconnections(game:GetService("Players").LocalPlayer.Idled)) do v:Disable() end
 
--- Simple Text ESP
-function Simple_Create(base, name, trackername, studs)
-    local bb = Instance.new('BillboardGui', game.CoreGui)
-    bb.Adornee = base
-    bb.ExtentsOffset = Vector3.new(0,1,0)
-    bb.AlwaysOnTop = true
-    bb.Size = UDim2.new(0,6,0,6)
-    bb.StudsOffset = Vector3.new(0,1,0)
-    bb.Name = trackername
+local JumpPower = EvadeSector:AddSlider("JumpPower", 3, 3, 20, 1, function(Value)
+    Settings.Jump = Value
+end)
 
-    local frame = Instance.new('Frame', bb)
-    frame.ZIndex = 10
-    frame.BackgroundTransparency = 0.3
-    frame.Size = UDim2.new(1,0,1,0)
-    frame.BackgroundColor3 = Color3.fromRGB(255, 0, 0)
+EvadeSector:AddButton('Respawn',function()
+    game:GetService("ReplicatedStorage").Events.Respawn:FireServer()
+end)
 
-    local txtlbl = Instance.new('TextLabel', bb)
-    txtlbl.ZIndex = 10
-    txtlbl.BackgroundTransparency = 1
-    txtlbl.Position = UDim2.new(0,0,0,-48)
-    txtlbl.Size = UDim2.new(1,0,10,0)
-    txtlbl.Font = 'ArialBold'
-    txtlbl.FontSize = 'Size12'
-    txtlbl.Text = name
-    txtlbl.TextStrokeTransparency = 0.5
-    txtlbl.TextColor3 = Color3.fromRGB(255, 0, 0)
-
-    local txtlblstud = Instance.new('TextLabel', bb)
-    txtlblstud.ZIndex = 10
-    txtlblstud.BackgroundTransparency = 1
-    txtlblstud.Position = UDim2.new(0,0,0,-35)
-    txtlblstud.Size = UDim2.new(1,0,10,0)
-    txtlblstud.Font = 'ArialBold'
-    txtlblstud.FontSize = 'Size12'
-    txtlblstud.Text = tostring(studs) .. " Studs"
-    txtlblstud.TextStrokeTransparency = 0.5
-    txtlblstud.TextColor3 = Color3.new(255,255,255)
-end
-
--- Clear ESP
-function ClearESP(espname)
-    for _,v in pairs(game.CoreGui:GetChildren()) do
-        if v.Name == espname and v:isA('BillboardGui') then
-            v:Destroy()
-        end
-    end
-end
-
--- God Mode 
-MainSection:AddButton("God Mode", "Gives you god mode", function()
+EvadeSector:AddButton('GodMode',function()
     pcall(function()
         for i,v in next, game:GetDescendants() do
             if v.IsA(v,"BindableEvent") and string.lower(v.Name) == 'force' then
@@ -111,133 +61,182 @@ MainSection:AddButton("God Mode", "Gives you god mode", function()
         end)
     end)
 
--- Respawn/Reset
-MainSection:AddButton("Respawn", "Free respawn, no need to pay 15 robux!", function()
-    local Reset = Events:FindFirstChild("Reset")
-    local Respawn = Events:FindFirstChild("Respawn")
+Farms:AddToggle('Ticket Farm', false, function(State)
+    Settings.TicketFarm = State
+end)
 
-    if Reset and Respawn then
-        Reset:FireServer();
-        task.wait(2)
-        Respawn:FireServer();
+Farms:AddToggle('Afk Farm', false, function(State)
+    Settings.afkfarm = State
+end)
+
+Visuals:AddToggle('Enable Esp', false, function(State)
+    Esp.Enabled = State
+end)
+
+Visuals:AddToggle('Bot Esp', false, function(State)
+    Esp.NPCs = State
+end)
+
+Visuals:AddToggle('Ticket Esp', false, function(State)
+    Esp.TicketEsp = State
+end)
+
+Visuals:AddToggle('Players', false, function(State)
+    Esp.Players = State
+end)
+
+local FindAI = function()
+    for _,v in pairs(WorkspacePlayers:GetChildren()) do
+        if not Players:FindFirstChild(v.Name) then
+            return v
+        end
+    end
+end
+
+
+local GetDownedPlr = function()
+    for i,v in pairs(WorkspacePlayers:GetChildren()) do
+        if v:GetAttribute("Downed") then
+            return v
+        end
+    end
+end
+
+--Shitty Auto farm 🥶💀🤡💀🤡💀🤡
+local revive = function()
+    local downedplr = GetDownedPlr()
+    if downedplr ~= nil and downedplr:FindFirstChild('HumanoidRootPart') then
+        task.spawn(function()
+            while task.wait() do
+                if localplayer.Character then
+                    workspace.Game.Settings:SetAttribute("ReviveTime", 2.2)
+                    localplayer.Character:FindFirstChild('HumanoidRootPart').CFrame = CFrame.new(downedplr:FindFirstChild('HumanoidRootPart').Position.X, downedplr:FindFirstChild('HumanoidRootPart').Position.Y + 3, downedplr:FindFirstChild('HumanoidRootPart').Position.Z)
+                    task.wait()
+                    game:GetService("ReplicatedStorage").Events.Revive.RevivePlayer:FireServer(tostring(downedplr), false)
+                    task.wait(4.5)
+                    game:GetService("ReplicatedStorage").Events.Revive.RevivePlayer:FireServer(tostring(downedplr), true)
+                    game:GetService("ReplicatedStorage").Events.Revive.RevivePlayer:FireServer(tostring(downedplr), true)
+                    game:GetService("ReplicatedStorage").Events.Revive.RevivePlayer:FireServer(tostring(downedplr), true)
+                    break
+                end
+            end
+        end)
+    end
+end
+
+--Kiriot
+Esp:AddObjectListener(WorkspacePlayers, {
+    Color =  Color3.fromRGB(255,0,0),
+    Type = "Model",
+    PrimaryPart = function(obj)
+        local hrp = obj:FindFirstChild('HRP')
+        while not hrp do
+            wait()
+            hrp = obj:FindFirstChild('HRP')
+        end
+        return hrp
+    end,
+    Validator = function(obj)
+        return not game.Players:GetPlayerFromCharacter(obj)
+    end,
+    CustomName = function(obj)
+        return '[AI] '..obj.Name
+    end,
+    IsEnabled = "NPCs",
+})
+
+Esp:AddObjectListener(game:GetService("Workspace").Game.Effects.Tickets, {
+    --Name = "Ticket4",
+    CustomName = "Ticket",
+    Color = Color3.fromRGB(41,180,255),
+    IsEnabled = "TicketEsp"
+})
+
+--Tysm CJStylesOrg
+Esp.Overrides.GetColor = function(char)
+   local GetPlrFromChar = Esp:GetPlrFromChar(char)
+   if GetPlrFromChar then
+       if Settings.Downedplayeresp and GetPlrFromChar.Character:GetAttribute("Downed") then
+           return Settings.DownedColor
+       end
+   end
+   return Settings.PlayerColor
+end
+
+local old
+old = hookmetamethod(game,"__namecall",newcclosure(function(self,...)
+    local Args = {...}
+    local method = getnamecallmethod()
+    if tostring(self) == 'Communicator' and method == "InvokeServer" and Args[1] == "update" then
+        return Settings.Speed, Settings.Jump 
+    end
+    return old(self,...)
+end))
+
+
+task.spawn(function()
+    while task.wait() do
+        if Settings.TicketFarm then
+         
+            if game.Players.LocalPlayer:GetAttribute('InMenu') ~= true then
+                for i,v in pairs(game:GetService("Workspace").Game.Effects.Tickets:GetChildren()) do
+                    localplayer.Character.HumanoidRootPart.CFrame = CFrame.new(v:WaitForChild('HumanoidRootPart').Position)
+                end
+            else
+                task.wait(2)
+                game:GetService("ReplicatedStorage").Events.Respawn:FireServer()
+            end
+            
+            if localplayer.Character and localplayer.Character:GetAttribute("Downed") then
+                game:GetService("ReplicatedStorage").Events.Respawn:FireServer()
+                task.wait(2)
+            end
+            
+        end
     end
 end)
 
--- Make server all bright so your eye balls can see
-MainSection:AddButton("Full Bright", "For users who are scared of the dark :(", function()
-    local light = Instance.new("PointLight", Character.HumanoidRootPart)
-    light.Brightness = .3
-    light.Range = 10000
 
-    Lighting.TimeOfDay = "14:00:00"
-    Lighting.FogEnd = 10000;
-    Lighting.Brightness = 2;
-    Lighting.Ambient = Color3.fromRGB(255,255,255)
-    Lighting.FogColor = Color3.fromRGB(255,255,255)
-end)
+task.spawn(function()
+    while task.wait() do
+        if Settings.AutoRespawn then
+             if localplayer.Character and localplayer.Character:GetAttribute("Downed") then
+                game:GetService("ReplicatedStorage").Events.Respawn:FireServer()
+             end
+        end
 
-MainSection:AddSlider("WalkSpeed", "Adjust WalkSpeed to be speed", 1450, 10000, 1450, true, function(val)
-    pcall(function()
-        local Character = Player.Character;
-        Character.Humanoid:SetAttribute("RealSpeed", tonumber(val));
-    end)
-end)
-
-MainSection:AddSlider("JumpPower", "Adjust JumpPower and dunk", 3, 15, 3, true, function(val)
-    pcall(function()
-        local Character = Player.Character;
-        Character.Humanoid:SetAttribute("RealJumpHeight", tonumber(val));
-    end)
-end)
-
--- Character Highlights
-ESPSection:AddButton("Character Highlights", "Highlights all characters to make them easier to see.", function()
-    ESP:ClearESP();
-    Highlights_Active = true;
-
-    for i, v in ipairs(Players:GetPlayers()) do
-        if v ~= Player then
-            v.CharacterAdded:Connect(function(Char)
-                ESP:AddOutline(Char)
-                ESP:AddNameTag(Char)
-            end)
-
-            if v.Character then
-                ESP:AddOutline(v.Character)
-                ESP:AddNameTag(v.Character)
+        if Settings.NoCameraShake then
+            localplayer.PlayerScripts.CameraShake.Value = CFrame.new(0,0,0) * CFrame.new(0,0,0)
+        end
+        if Settings.moneyfarm then
+            if localplayer.Character and localplayer.Character:GetAttribute("Downed") then
+                game:GetService("ReplicatedStorage").Events.Respawn:FireServer()
+                task.wait(3)
+            else
+                revive()
+                task.wait(1)
             end
         end
-    end
-end)
-
--- AI Text ESP
-ESPSection:AddToggle("AI ESP", "Adds text ESP to AI to make them easier to see.", false, function(bool)
-    AI_ESP = bool;
-end)
-
--- No Camera Shake
-CamSection:AddToggle("No Camera Shake", "Removes camera shake that is caused by the AI.", false, function(bool)
-    No_CamShake = bool;
-end)
-
- -- AFKFarm
- AFKSection:AddButton("Farm", "", function()
-    while task.wait() do
-        c = math.random(150,350)
-        if game:GetService("Workspace").Game.Map.Parts:FindFirstChild("KillBricks") then game:GetService("Workspace").Game.Map.Parts.KillBricks:Destroy() end
-        task.wait()
-        game.Workspace.Game.Players:WaitForChild(game.Players.LocalPlayer.Name):WaitForChild("HumanoidRootPart").CFrame = CFrame.new(0,c,0)
-end
-end)
--- [[ Helpers / Loop Funcs ]] --
-
--- Highlight helper
-game:GetService("Players").PlayerAdded:Connect(function(Player)
-    Player.CharacterAdded:Connect(function(Char)
-        if Highlights_Active then
-            ESP:AddOutline(Char)
-            ESP:AddNameTag(Char)
-        end
-    end)
-end)
-
--- Target only Local Player
-Player.CharacterAdded:Connect(function(Char)
-    local Hum = Char:WaitForChild("Humanoid", 1337);
-
-    -- Godmode helper (Credits to Egg Salad)
-    if GodMode_Enabled then
-        Hum.Parent = nil;
-        Hum.Parent = Char;
-    end
-end)
-
-
--- ESP AI
-task.spawn(function()
-    while task.wait(0.05) do
-        if AI_ESP then
-            pcall(function()
-                ClearESP("AI_Tracker")
-                local GamePlayers = Workspace:WaitForChild("Game", 1337).Players;
-                for i,v in pairs(GamePlayers:GetChildren()) do
-                    if not game.Players:FindFirstChild(v.Name) then -- Is AI
-                        local studs = Player:DistanceFromCharacter(v.PrimaryPart.Position)
-                        Simple_Create(v.HumanoidRootPart, v.Name, "AI_Tracker", math.floor(studs + 0.5))
-                    end
-                end
-            end)
-        else
-            ClearESP("AI_Tracker");
+        if Settings.moneyfarm == false and Settings.afkfarm and localplayer.Character:FindFirstChild('HumanoidRootPart') ~= nil then
+            localplayer.Character:FindFirstChild('HumanoidRootPart').CFrame = CFrame.new(6007, 7005, 8005)
         end
     end
 end)
 
--- Camera Shake
-task.spawn(function()
-    while task.wait() do
-        if No_CamShake then
-            Player.PlayerScripts:WaitForChild("CameraShake", 1234).Value = CFrame.new(0,0,0) * CFrame.Angles(0,0,0);
-        end
-    end
-end)
+local GC = getconnections or get_signal_cons
+	if GC then
+		for i,v in pairs(GC(localplayer.Idled)) do
+			if v["Disable"] then
+				v["Disable"](v)
+			elseif v["Disconnect"] then
+				v["Disconnect"](v)
+			end
+		end
+	else
+		localplayer.Idled:Connect(function()
+			local VirtualUser = game:GetService("VirtualUser")
+			VirtualUser:CaptureController()
+			VirtualUser:ClickButton2(Vector2.new())
+		end)
+	end
+--Infinite yield's Anti afk
