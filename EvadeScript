@@ -8,7 +8,7 @@ Esp.Enabled = false
 Esp.Tracers = false
 Esp.Boxes = false
 
-local Window = Library:CreateWindow("PhonkHub", Vector2.new(500, 300), Enum.KeyCode.LeftAlt)
+local Window = Library:CreateWindow("PhonkfHub", Vector2.new(500, 300), Enum.KeyCode.RightAlt)
 local Evade = Window:CreateTab("General")
 local EvadeMisc = Window:CreateTab("Misc")
 
@@ -17,6 +17,7 @@ local Visuals = Evade:CreateSector("Visuals", "right")
 local Farms = EvadeMisc:CreateSector("Farms", "left")
 local Bright = EvadeMisc:CreateSector("FullBright", "right")
 local revive = EvadeMisc:CreateSector("Fast revive","right")
+local Autoresp = EvadeMisc:CreateSector("AutoRespawn","left")
 
 getgenv().Settings = {
     moneyfarm = false,
@@ -112,8 +113,11 @@ revive:AddToggle('Fast Revive', false, function(State)
         workspace.Game.Settings:SetAttribute("ReviveTime", Settings.reviveTime)
     end
 end)
+Autoresp:AddToggle('Auto Respawn',false,function (State)
+    Settings.AutoRespawn = State
+end
 
---Shitty Auto farm 🥶💀🤡💀🤡💀🤡
+--Auto farm
 local revive = function()
     local downedplr = GetDownedPlr()
     if downedplr ~= nil and downedplr:FindFirstChild('HumanoidRootPart') then
@@ -135,7 +139,7 @@ local revive = function()
     end
 end
 
---Kiriot
+--Esp
 Esp:AddObjectListener(WorkspacePlayers, {
     Color =  Color3.fromRGB(255,0,0),
     Type = "Model",
@@ -210,6 +214,12 @@ end)
 
 task.spawn(function()
     while task.wait() do
+ if Settings.AutoRespawn then
+             if localplayer.Character and localplayer.Character:GetAttribute("Downed") then
+                game:GetService("ReplicatedStorage").Events.Respawn:FireServer()
+             end
+        end
+
         if Settings.AutoRespawn then
              if localplayer.Character and localplayer.Character:GetAttribute("Downed") then
                 game:GetService("ReplicatedStorage").Events.Respawn:FireServer()
