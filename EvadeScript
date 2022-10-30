@@ -113,9 +113,10 @@ revive:AddToggle('Fast Revive', false, function(State)
         workspace.Game.Settings:SetAttribute("ReviveTime", Settings.reviveTime)
     end
 end)
+
 Autoresp:AddToggle('Auto Respawn',false,function (State)
     Settings.AutoRespawn = State
-end
+end)
 
 --Auto farm
 local revive = function()
