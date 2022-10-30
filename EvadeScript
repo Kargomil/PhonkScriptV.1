@@ -8,7 +8,7 @@ Esp.Enabled = false
 Esp.Tracers = false
 Esp.Boxes = false
 
-local Window = Library:CreateWindow("PhonkfHub", Vector2.new(500, 300), Enum.KeyCode.RightAlt)
+local Window = Library:CreateWindow("PhonkHub", Vector2.new(500, 300), Enum.KeyCode.RightShift)
 local Evade = Window:CreateTab("General")
 local EvadeMisc = Window:CreateTab("Misc")
 
