@@ -11,6 +11,7 @@ Esp.Boxes = false
 local Window = Library:CreateWindow("PhonkHub", Vector2.new(500, 300), Enum.KeyCode.RightShift)
 local Evade = Window:CreateTab("General")
 local EvadeMisc = Window:CreateTab("Misc")
+local Credit = Window:CreateTab("Credit/UI")
 
 local EvadeSector = Evade:CreateSector("Character", "left")
 local Visuals = Evade:CreateSector("Visuals", "right")
@@ -18,6 +19,8 @@ local Farms = EvadeMisc:CreateSector("Farms", "left")
 local Bright = EvadeMisc:CreateSector("FullBright", "right")
 local revive = EvadeMisc:CreateSector("Fast revive","right")
 local Autoresp = EvadeMisc:CreateSector("AutoRespawn","left")
+local Credits = Credit:CreateSector("Credits", "left")
+local Uiset = Credit:CreateSector("UI","right")
 
 getgenv().Settings = {
     moneyfarm = false,
@@ -29,8 +32,6 @@ getgenv().Settings = {
     Speed = 1450,
     Jump = 3,
     reviveTime = 3,
-    DownedColor = Color3.fromRGB(255,0,0),
-    PlayerColor = Color3.fromRGB(255,170,0),
 }
 
 
@@ -117,6 +118,10 @@ end)
 Autoresp:AddToggle('Auto Respawn',false,function (State)
     Settings.AutoRespawn = State
 end)
+
+Credits:AddLabel("Developed By Kargoligach")
+Credits:AddLabel("UI Lib: Jans Lib")
+Uiset:AddLabel("UI: RightShift")
 
 --Auto farm
 local revive = function()
