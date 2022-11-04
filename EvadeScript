@@ -21,7 +21,7 @@ local revive = EvadeMisc:CreateSector("Fast revive","right")
 local Autoresp = EvadeMisc:CreateSector("AutoRespawn","left")
 local Credits = Credit:CreateSector("Credits", "left")
 local Uiset = Credit:CreateSector("UI","right")
-
+local Discrod = Credit:CreateSector("Discrod","left")
 getgenv().Settings = {
     moneyfarm = false,
     afkfarm = false,
@@ -122,6 +122,7 @@ end)
 Credits:AddLabel("Developed By Kargoligach")
 Credits:AddLabel("UI Lib: Jans Lib")
 Uiset:AddLabel("UI: RightShift")
+Discrod:AddLabel("discord.gg/RGb5Waybuq")
 
 --Auto farm
 local revive = function()
