@@ -10,7 +10,6 @@ local General = Window:CreateTab("General")
 local ui = Window:CreateTab("Settings/UI")
 local Main4 = General:CreateSector("Visual", "left")
 local Main2 = General:CreateSector("Aim", "right")
-local Misc = General:CreateSector("Misc","right")
 ui:CreateConfigSystem("left")
 
 
