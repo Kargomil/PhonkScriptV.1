@@ -1,0 +1,49 @@
+local library = loadstring(game:HttpGet("https://raw.githubusercontent.com/Kargomil/PhonkScriptV.1/main/Ui"))()
+local Window = library:CreateWindow("PhonkHub", Vector2.new(450, 300), Enum.KeyCode.RightShift)
+
+local ESPSettings = { PlayerESP = { Enabled = false, TracersOn = false, BoxesOn = false, NamesOn = false, DistanceOn = false, HealthOn = false, ToolOn = false, FaceCamOn = false, Distance = 2000 }, ScrapESP = { Enabled = false, Distance = 2000, LegendaryOnly = true, RareOnly = true, GoodOnly = true, BadOnly = true }, SafeESP = { Enabled = false, Distance = 2000, BigOnly = true, SmallOnly = true }, RegisterESP = { Enabled = false, Distance = 2000 }, ESPColor = Color3.fromRGB(255, 255, 255), ToolColor = Color3.fromRGB(255, 255, 255)};
+local ESPFramework = loadstring(game:HttpGet("https://raw.githubusercontent.com/NougatBitz/Femware-Leak/main/ESP.lua", true))()
+
+
+local General = Window:CreateTab("General")
+local Main4 = General:CreateSector("Visual", "left")
+
+Main4:AddToggle("Enable ESP", ESPSettings.PlayerESP.Enabled, function(v)
+    ESPSettings.PlayerESP.Enabled = v
+
+    ESPFramework.Color = ESPSettings.ESPColor
+    ESPFramework.ToolColor = ESPSettings.ToolColor
+    ESPFramework.Tracers = ESPSettings.PlayerESP.TracersOn
+    ESPFramework.Names = ESPSettings.PlayerESP.NamesOn
+    ESPFramework.Health = ESPSettings.PlayerESP.HealthOn
+    ESPFramework.Distance = ESPSettings.PlayerESP.DistanceOn
+    ESPFramework.Tool = ESPSettings.PlayerESP.ToolOn
+    ESPFramework.Boxes = ESPSettings.PlayerESP.BoxesOn
+    ESPFramework.FaceCamera = ESPSettings.PlayerESP.FaceCamOn
+    ESPFramework:Toggle(ESPSettings.PlayerESP.Enabled)
+end, "PlayerESPsToggle")
+
+Main4:AddToggle("Box ESP", ESPSettings.PlayerESP.BoxesOn, function(v)
+    ESPSettings.PlayerESP.BoxesOn = v
+    ESPFramework.Boxes = ESPSettings.PlayerESP.BoxesOn
+end)
+
+Main4:AddToggle("Tracers ESP", ESPSettings.PlayerESP.TracersOn, function(v)
+    ESPSettings.PlayerESP.TracersOn = v
+    ESPFramework.Tracers = ESPSettings.PlayerESP.TracersOn
+end)
+
+Main4:AddToggle("Name ESP", ESPSettings.PlayerESP.NamesOn, function(v)
+    ESPSettings.PlayerESP.NamesOn = v
+    ESPFramework.Names = ESPSettings.PlayerESP.NamesOn
+end)
+
+Main4:AddToggle("Health ESP", ESPSettings.PlayerESP.HealthOn, function(v)
+    ESPSettings.PlayerESP.HealthOn = v
+    ESPFramework.Health = ESPSettings.PlayerESP.HealthOn
+end)
+
+Main4:AddToggle("Tool ESP", ESPSettings.PlayerESP.ToolOn, function(v)
+    ESPSettings.PlayerESP.ToolOn = v
+    ESPFramework.Tool = ESPSettings.PlayerESP.ToolOn
+end)
