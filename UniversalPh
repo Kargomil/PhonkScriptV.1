@@ -25,7 +25,7 @@ local Window = Rayfield:CreateWindow({
 		FileName = "Key",
 		SaveKey = true,
 		GrabKeyFromSite = true, -- If this is true, set Key below to the RAW site you would like Rayfield to get the key from
-		Key = "g4j2gfd"
+		Key = "g4g2jl5"
 	}
 })
 
