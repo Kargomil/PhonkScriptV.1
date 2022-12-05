@@ -188,7 +188,7 @@ local Toggle = Tab1:CreateToggle({
 	end,
 })
 local Button = Tab2:CreateButton({
-	Name = "Button Example",
+	Name = "InfJump",
 	Callback = function()
 
 local function TKDWQ_fake_script() -- INFJUMP.LocalScript 
