@@ -24,7 +24,7 @@ local Window = Rayfield:CreateWindow({
 		Note = "Join the discord for key",
 		FileName = "Key",
 		SaveKey = true,
-		GrabKeyFromSite = true, -- If this is true, set Key below to the RAW site you would like Rayfield to get the key from
+		GrabKeyFromSite =false, -- If this is true, set Key below to the RAW site you would like Rayfield to get the key from
 		Key = "5df8g234hdfg43uj435gjdg9"
 	}
 })
