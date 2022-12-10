@@ -23,8 +23,8 @@ local Window = Rayfield:CreateWindow({
 		Note = "Join the discord (discord.gg/RGb5Waybuq)",
 		FileName = "PhonkKey",
 		SaveKey = true,
-		GrabKeyFromSite = true,
-		Key = "https://pastebin.com/tRfJdX7V"
+		GrabKeyFromSite = false,
+		Key = "9df80gg0934fgnun03ja409jgi"
 	}
 })
 aimbot=false
