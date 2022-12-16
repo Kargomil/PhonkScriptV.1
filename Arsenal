@@ -24,7 +24,7 @@ local Window = Rayfield:CreateWindow({
 		FileName = "PhonkKey",
 		SaveKey = true,
 		GrabKeyFromSite = false,
-		Key = "9df80gg0934fgnun03ja409jgi"
+		Key = "K1QJsoGqx2CYcHzS6pD"
 	}
 })
 aimbot=false
